@@ -1,0 +1,21 @@
+[project]
+name = "socket-yolo"
+version = "1.0.0"
+description = ""
+authors = [
+    { name = "Vicente-G" },
+]
+dependencies = [
+    "setuptools>=68.2.0",
+    "numpy>=1.25.2",
+    "gitpython>=3.1.30",
+    "thop>=0.1.1.post2209072238",
+    "opencv-python-headless>=4.8.0.76",
+    "torch>=2.0.0, !=2.0.1",
+    "ultralytics>=8.0.172",
+]
+requires-python = ">=3.9"
+
+[build-system]
+requires = ["hatchling>=1.17.1", "hatch-vcs>=0.3.0"]
+build-backend = "hatchling.build"
