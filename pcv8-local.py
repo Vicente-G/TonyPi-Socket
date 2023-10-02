@@ -1,14 +1,27 @@
 import cv2
-import time
 import socket
 import numpy as np
 import ultralytics
 
+# Run: pdm run python3 pcv8-local.py
+
 camera = cv2.VideoCapture(0)
 model = ultralytics.YOLO("v8n.pt")
-WIDTH, HEIGHT = 640, 480
+WIDTH, HEIGHT = 1280, 720
 ACTIONS = {
     "hola": b"wave",
+    "sumo": b"bow",
+    "baila": b"twist",
+    "squat": b"squat",
+    "flex": b"sit_ups",
+    "dio": b"chest",
+    "bro": b"lift_down",
+    "dab": b"left_uppercut",
+    "rick": b"wing_chun",
+    "cueca": b"stepping",
+    "kpop": b"17",
+    "rapear": b"20",
+    "drama": b"22"
 }
 
 def check_substring(arr, word):
@@ -33,7 +46,7 @@ def add_text(img, detections, selected):
         if selected is not None and char == selected[counter]:
             counter += 1
             color = (0, 255, 0)
-        pos, sz = ((idx + 1) * (WIDTH - 30) // 13, HEIGHT - 40), WIDTH // 250
+        pos, sz = ((idx + 1) * (WIDTH - 30) // 25, 80), WIDTH // 450
         cv2.putText(img, char.upper(), pos, 0, sz, color, sz+2)
 
 def main(server):
@@ -52,7 +65,7 @@ def main(server):
             last_detection = result.names[classes[0]]
         elif not classes:
             last_detection = None
-        detections = detections[-12:]
+        detections = detections[-24:]
         selected = check(detections)
 
         display = result.plot()
@@ -64,14 +77,14 @@ def main(server):
         if selected is not None:
             conn.sendall(ACTIONS[selected])
             detections.clear()
-            time.sleep(1)
+            conn.recv(1000)
 
     cv2.destroyAllWindows()
     camera.release()
     server.close()
 
 if __name__ == "__main__":
-    IP, PORT = "192.168.149.68", 30000
+    IP, PORT = "192.168.149.213", 30000
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind((IP, PORT))
     server.listen()
